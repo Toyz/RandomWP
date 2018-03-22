@@ -29,6 +29,7 @@ func Search(query string, options ...Option) (ids []ID, err error) {
 	// Send search request.
 	rawquery := values.Encode()
 	rawurl := "http://alpha.wallhaven.cc/search?" + rawquery
+	fmt.Println(rawurl)
 	doc, err := goquery.NewDocument(rawurl)
 	if err != nil {
 		return nil, errutil.Err(err)

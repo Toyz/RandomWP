@@ -102,7 +102,7 @@ const (
 // String returns a string representation of the search option.
 func (v Purity) String() string {
 	purityNames := map[Purity]string{
-		PuritySFW:     "SFW",
+		PuritySFW:     "sfw",
 		PuritySketchy: "sketchy",
 	}
 	var names []string
@@ -122,7 +122,7 @@ func (v Purity) String() string {
 //    * NSFW
 func (v *Purity) Set(s string) error {
 	purity := map[string]Purity{
-		"SFW":     PuritySFW,
+		"sfw":     PuritySFW,
 		"sketchy": PuritySketchy,
 	}
 	names := strings.Split(s, ",")

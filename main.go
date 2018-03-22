@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Toyz/RandomWP/desktop"
@@ -34,6 +35,8 @@ var (
 	// Send notifcations (default false)
 	notify bool
 
+	autoQuit bool
+
 	lastID wallhaven.ID
 
 	running bool
@@ -49,6 +52,36 @@ type SysTest struct {
 
 func (m *SysTest) ChangeBackground(mn *desktop.Menu) {
 	changeWallpaper()
+}
+
+func (m *SysTest) ChageCategory(mn *desktop.Menu) {
+	var c wallhaven.Categories
+	c.Set(strings.ToLower(mn.Name))
+	cats = c
+
+	for i := 0; i < len(m.S.Menu[3].Menu); i++ {
+		m.S.Menu[3].Menu[i].State = false
+	}
+
+	mn.State = true
+	m.S.Update()
+
+	createOptions()
+}
+
+func (m *SysTest) ChageSafety(mn *desktop.Menu) {
+	var c wallhaven.Purity
+	c.Set(strings.ToLower(mn.Name))
+	purity = c
+
+	for i := 0; i < len(m.S.Menu[4].Menu); i++ {
+		m.S.Menu[4].Menu[i].State = false
+	}
+
+	mn.State = true
+	m.S.Update()
+
+	createOptions()
 }
 
 func (m *SysTest) QuitProgram(mn *desktop.Menu) {
@@ -83,29 +116,45 @@ func main() {
 	flag.Var(&ratios, "ratios", "Aspect ratios (4x3,5x4,16x9,16x10,21x9,32x9,48x9)")
 	flag.Int64Var(&delay, "delay", 30, "Delay between background changes (in seconds)")
 	flag.BoolVar(&runOnce, "once", false, "Only run the program once")
+	flag.BoolVar(&autoQuit, "quit", false, "Auto quit after task finishes (Only works with once)")
 	flag.BoolVar(&notify, "notify", false, "Show notification when wallpaper changes")
 	flag.Parse()
+	createOptions()
+
+	rand.Seed(time.Now().Unix())
+	if runOnce {
+		if !autoQuit {
+			go changeWallpaper()
+			setupTrayIcon(false)
+		} else {
+			changeWallpaper()
+		}
+	} else {
+		go DoForeverLoop()
+		setupTrayIcon(true)
+	}
+}
+
+func createOptions() {
+	options = make([]wallhaven.Option, 0)
 
 	if cats != 0 {
 		options = append(options, cats)
+	} else {
+		options = append(options, wallhaven.CatGeneral)
+		cats = wallhaven.CatGeneral
 	}
 	if purity != 0 {
 		options = append(options, purity)
+	} else {
+		options = append(options, wallhaven.PuritySFW)
+		purity = wallhaven.PuritySFW
 	}
 	if res != 0 {
 		options = append(options, res)
 	}
 	if ratios != 0 {
 		options = append(options, ratios)
-	}
-
-	rand.Seed(time.Now().Unix())
-	if runOnce {
-		go changeWallpaper()
-		setupTrayIcon(false)
-	} else {
-		go DoForeverLoop()
-		setupTrayIcon(true)
 	}
 }
 
@@ -119,6 +168,7 @@ func DoForeverLoop() {
 }
 
 func changeWallpaper() {
+	createOptions()
 	var page wallhaven.Page
 	page.Set(strconv.Itoa(random(1, 3))) // between 1 or 2...
 	options = append(options, page)
@@ -165,11 +215,20 @@ func setupTrayIcon(forever bool) {
 		panic(err)
 	}
 
-	runningMenuOption := desktop.Menu{Type: desktop.MenuCheckBox, State: forever, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning}
-
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
-		runningMenuOption,
+		desktop.Menu{Type: desktop.MenuCheckBox, State: forever, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning},
+		desktop.Menu{Type: desktop.MenuSeparator},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Category", Menu: []desktop.Menu{
+			desktop.Menu{Type: desktop.MenuCheckBox, State: cats == wallhaven.CatAnime, Enabled: true, Name: "Anime", Action: sys.ChageCategory},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: cats == wallhaven.CatPeople, Enabled: true, Name: "People", Action: sys.ChageCategory},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: cats == wallhaven.CatGeneral, Enabled: true, Name: "General", Action: sys.ChageCategory},
+		}},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Purity", Menu: []desktop.Menu{
+			desktop.Menu{Type: desktop.MenuCheckBox, State: purity == wallhaven.PuritySFW, Enabled: true, Name: "SFW", Action: sys.ChageSafety},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: purity == wallhaven.PuritySketchy, Enabled: true, Name: "Sketchy", Action: sys.ChageSafety},
+		}},
+		// SFW,sketchy
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
@@ -180,7 +239,6 @@ func setupTrayIcon(forever bool) {
 	sys.S.Show()
 
 	desktop.Main()
-
 }
 
 func deleteFile(path string) {
