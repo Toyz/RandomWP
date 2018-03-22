@@ -16,7 +16,7 @@ func main() {
 	var page wallhaven.Page
 
 	for {
-		page.Set(strconv.Itoa(random(1, 2)))
+		page.Set(strconv.Itoa(random(1, 3))) // between 1 or 2...
 
 		havenIDs, _ := wallhaven.Search("anime", wallhaven.CatAnime, wallhaven.Ratio16x9, wallhaven.SortRandom, wallhaven.PuritySketchy, page)
 
