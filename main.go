@@ -84,6 +84,21 @@ func (m *SysTest) ChageSafety(mn *desktop.Menu) {
 	createOptions()
 }
 
+func (m *SysTest) ChangeRatio(mn *desktop.Menu) {
+	var c wallhaven.Ratios
+	c.Set(strings.ToLower(mn.Name))
+	ratios = c
+
+	for i := 0; i < len(m.S.Menu[5].Menu); i++ {
+		m.S.Menu[5].Menu[i].State = false
+	}
+
+	mn.State = true
+	m.S.Update()
+
+	createOptions()
+}
+
 func (m *SysTest) QuitProgram(mn *desktop.Menu) {
 	os.Exit(0)
 }
@@ -152,12 +167,17 @@ func createOptions() {
 		purity = wallhaven.PuritySFW
 	}
 
+	if ratios != 0 {
+		options = append(options, ratios)
+	} else {
+		options = append(options, wallhaven.Ratio16x9)
+		ratios = wallhaven.Ratio16x9
+	}
+
 	if res != 0 {
 		options = append(options, res)
 	}
-	if ratios != 0 {
-		options = append(options, ratios)
-	}
+
 }
 
 func DoForeverLoop() {
@@ -231,6 +251,16 @@ func setupTrayIcon(forever bool) {
 			desktop.Menu{Type: desktop.MenuCheckBox, State: purity == wallhaven.PuritySketchy, Enabled: true, Name: "Sketchy", Action: sys.ChageSafety},
 		}},
 		// SFW,sketchy
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Display Raio", Menu: []desktop.Menu{
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio4x3, Enabled: true, Name: "4x3", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio5x4, Enabled: true, Name: "5x4", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio16x9, Enabled: true, Name: "16x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio16x10, Enabled: true, Name: "16x10", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio21x9, Enabled: true, Name: "21x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio32x9, Enabled: true, Name: "32x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio48x9, Enabled: true, Name: "49x9", Action: sys.ChangeRatio},
+		}},
+		//4x3,5x4,16x9,16x10,21x9,32x9,48x9
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
