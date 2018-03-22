@@ -97,7 +97,6 @@ type Purity uint32
 const (
 	PuritySFW Purity = 1 << iota
 	PuritySketchy
-	PurityNSFW
 )
 
 // String returns a string representation of the search option.
@@ -105,10 +104,9 @@ func (v Purity) String() string {
 	purityNames := map[Purity]string{
 		PuritySFW:     "SFW",
 		PuritySketchy: "sketchy",
-		PurityNSFW:    "NSFW",
 	}
 	var names []string
-	for mask := PuritySFW; mask <= PurityNSFW; mask <<= 1 {
+	for mask := PuritySFW; mask <= PuritySketchy; mask <<= 1 {
 		if v&mask != 0 {
 			name := purityNames[mask]
 			names = append(names, name)
@@ -126,7 +124,6 @@ func (v *Purity) Set(s string) error {
 	purity := map[string]Purity{
 		"SFW":     PuritySFW,
 		"sketchy": PuritySketchy,
-		"NSFW":    PurityNSFW,
 	}
 	names := strings.Split(s, ",")
 	for _, name := range names {
@@ -155,9 +152,6 @@ func (v Purity) Value() string {
 		sketchy = "1"
 	}
 	nsfw := "0"
-	if v&PurityNSFW != 0 {
-		nsfw = "1"
-	}
 	return sfw + sketchy + nsfw
 }
 
