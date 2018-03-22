@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"os"
 	"strings"
@@ -54,6 +55,7 @@ func setupTrayIcon(forever bool) {
 		}},
 		//4x3,5x4,16x9,16x10,21x9,32x9,48x9
 		desktop.Menu{Type: desktop.MenuSeparator},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Save Current Image", Action: sys.SaveCurrentImage},
 		desktop.Menu{Type: desktop.MenuCheckBox, State: notify, Enabled: true, Name: "Notify on Change", Action: sys.SendNotification},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
@@ -135,4 +137,13 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 	} else {
 		running = false
 	}
+}
+
+func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
+	desktopFolder := desktop.GetDesktopFolder() // will be changed when settings are a thing
+
+	var c wallhaven.ID
+	c = lastID
+	file, _ := c.Download(desktopFolder)
+	fmt.Printf("Saved File to: %s\n", file)
 }
