@@ -62,7 +62,7 @@ func deleteFile(path string) {
 		return
 	}
 
-	fmt.Println("==> done deleting file")
+	fmt.Println("==> deleted temp wallpaper")
 }
 
 func isError(err error) bool {
