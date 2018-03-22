@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/Toyz/RandomWP/wallhaven"
@@ -10,8 +12,13 @@ import (
 )
 
 func main() {
+	rand.Seed(time.Now().Unix())
+	var page wallhaven.Page
+
 	for {
-		havenIDs, _ := wallhaven.Search("anime", wallhaven.CatAnime, wallhaven.Ratio16x9, wallhaven.SortRandom, wallhaven.PuritySketchy)
+		page.Set(strconv.Itoa(random(1, 2)))
+
+		havenIDs, _ := wallhaven.Search("anime", wallhaven.CatAnime, wallhaven.Ratio16x9, wallhaven.SortRandom, wallhaven.PuritySketchy, page)
 
 		background, err := wallpaper.Get()
 
@@ -20,10 +27,11 @@ func main() {
 		}
 
 		fmt.Printf("Current wallpaper: %s\n", background)
-		file, _ := havenIDs[0].Download(os.TempDir())
+		file, _ := havenIDs[rand.Intn(len(havenIDs))].Download(os.TempDir())
 		fmt.Printf("New Wallpaper: %s\n", file)
 		wallpaper.SetFromFile(file)
-		deleteFile(file) // will get set at loop start
+
+		deleteFile(file)
 		time.Sleep(30 * time.Second)
 	}
 }
@@ -43,4 +51,8 @@ func isError(err error) bool {
 	}
 
 	return (err != nil)
+}
+
+func random(min, max int) int {
+	return rand.Intn(max-min) + min
 }
