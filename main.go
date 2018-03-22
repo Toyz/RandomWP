@@ -54,6 +54,12 @@ func (m *SysTest) ChangeBackground(mn *desktop.Menu) {
 	changeWallpaper()
 }
 
+func (m *SysTest) SendNotification(mn *desktop.Menu) {
+	mn.State = !mn.State
+	m.S.Update()
+	notify = mn.State
+}
+
 func (m *SysTest) ChageCategory(mn *desktop.Menu) {
 	var c wallhaven.Categories
 	c.Set(strings.ToLower(mn.Name))
@@ -261,6 +267,8 @@ func setupTrayIcon(forever bool) {
 			desktop.Menu{Type: desktop.MenuCheckBox, State: ratios == wallhaven.Ratio48x9, Enabled: true, Name: "49x9", Action: sys.ChangeRatio},
 		}},
 		//4x3,5x4,16x9,16x10,21x9,32x9,48x9
+		desktop.Menu{Type: desktop.MenuSeparator},
+		desktop.Menu{Type: desktop.MenuCheckBox, State: notify, Enabled: true, Name: "Notify on Change", Action: sys.SendNotification},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
