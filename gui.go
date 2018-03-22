@@ -142,8 +142,6 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 	desktopFolder := desktop.GetDesktopFolder() // will be changed when settings are a thing
 
-	var c wallhaven.ID
-	c = lastID
-	file, _ := c.Download(desktopFolder)
+	file, _ := lastID.Download(desktopFolder)
 	fmt.Printf("Saved File to: %s\n", file)
 }
