@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"os"
 	"strings"
@@ -142,6 +141,5 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 	desktopFolder := desktop.GetDesktopFolder() // will be changed when settings are a thing
 
-	file, _ := lastID.Download(desktopFolder)
-	fmt.Printf("Saved File to: %s\n", file)
+	go lastID.Download(desktopFolder)
 }
