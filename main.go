@@ -144,12 +144,14 @@ func createOptions() {
 		options = append(options, wallhaven.CatGeneral)
 		cats = wallhaven.CatGeneral
 	}
+
 	if purity != 0 {
 		options = append(options, purity)
 	} else {
 		options = append(options, wallhaven.PuritySFW)
 		purity = wallhaven.PuritySFW
 	}
+
 	if res != 0 {
 		options = append(options, res)
 	}
