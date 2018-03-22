@@ -101,12 +101,12 @@ func main() {
 
 	rand.Seed(time.Now().Unix())
 	if runOnce {
-		changeWallpaper()
-		return
+		go changeWallpaper()
+		setupTrayIcon(false)
+	} else {
+		go DoForeverLoop()
+		setupTrayIcon(true)
 	}
-
-	go DoForeverLoop()
-	setupTrayIcon()
 }
 
 func DoForeverLoop() {
@@ -117,6 +117,7 @@ func DoForeverLoop() {
 		time.Sleep(time.Duration(delay) * time.Second)
 	}
 }
+
 func changeWallpaper() {
 	var page wallhaven.Page
 	page.Set(strconv.Itoa(random(1, 3))) // between 1 or 2...
@@ -152,7 +153,7 @@ func changeWallpaper() {
 	deleteFile(file)
 }
 
-func setupTrayIcon() {
+func setupTrayIcon(forever bool) {
 	sys = &SysTest{desktop.DesktopSysTrayNew()}
 
 	file, err := os.Open("assets/icon.png")
@@ -164,7 +165,7 @@ func setupTrayIcon() {
 		panic(err)
 	}
 
-	runningMenuOption := desktop.Menu{Type: desktop.MenuCheckBox, State: true, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning}
+	runningMenuOption := desktop.Menu{Type: desktop.MenuCheckBox, State: forever, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning}
 
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
