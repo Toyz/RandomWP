@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/Toyz/RandomWP/wallpaper"
 	"github.com/gen2brain/beeep"
+	"github.com/marcsauter/single"
 )
 
 var (
@@ -32,6 +34,16 @@ var (
 )
 
 func main() {
+	s := single.New("RandomWP")
+	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
+		log.Fatal("another instance of the app is already running, exiting")
+		os.Exit(0)
+	} else if err != nil {
+		// Another error occurred, might be worth handling it as well
+		log.Fatalf("failed to acquire exclusive app lock: %v", err)
+	}
+	defer s.TryUnlock()
+
 	flag.Var(&cats, "cats", "Wallpaper categories (general,anime,people)")
 	flag.Var(&purity, "purity", "Purity modes (SFW,sketchy)")
 	flag.Var(&res, "res", "Screen resolutions (1024x768,1280x800,1366x768,1280x960,1440x900,1600x900,1280x1024,1600x1200,1680x1050,1920x1080,1920x1200,2560x1440,2560x1600,3840x1080,5760x1080,3840x2160)")
