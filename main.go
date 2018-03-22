@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image"
 	"log"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/Toyz/RandomWP/desktop"
 	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/Toyz/RandomWP/wallpaper"
 	"github.com/gen2brain/beeep"
@@ -31,7 +33,38 @@ var (
 	delay int64
 	// Send notifcations (default false)
 	notify bool
+
+	lastID wallhaven.ID
+
+	running bool
+
+	runningMenuOption *desktop.Menu
+
+	sys *SysTest
 )
+
+type SysTest struct {
+	S *desktop.DesktopSysTray
+}
+
+func (m *SysTest) ChangeBackground(mn *desktop.Menu) {
+	changeWallpaper()
+}
+
+func (m *SysTest) QuitProgram(mn *desktop.Menu) {
+	os.Exit(0)
+}
+
+func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
+	mn.State = !mn.State
+	m.S.Update()
+
+	if mn.State {
+		go DoForeverLoop()
+	} else {
+		running = false
+	}
+}
 
 func main() {
 	s := single.New("RandomWP")
@@ -72,12 +105,18 @@ func main() {
 		return
 	}
 
-	for {
+	go DoForeverLoop()
+	setupTrayIcon()
+}
+
+func DoForeverLoop() {
+	running = true
+
+	for running {
 		changeWallpaper()
 		time.Sleep(time.Duration(delay) * time.Second)
 	}
 }
-
 func changeWallpaper() {
 	var page wallhaven.Page
 	page.Set(strconv.Itoa(random(1, 3))) // between 1 or 2...
@@ -92,8 +131,16 @@ func changeWallpaper() {
 		return
 	}
 
+	currID := havenIDs[rand.Intn(len(havenIDs))]
+	if lastID != currID {
+		lastID = currID
+	} else {
+		for currID != lastID {
+			lastID = havenIDs[rand.Intn(len(havenIDs))]
+		}
+	}
 	fmt.Printf("Current wallpaper: %s\n", background)
-	file, _ := havenIDs[rand.Intn(len(havenIDs))].Download(os.TempDir())
+	file, _ := lastID.Download(os.TempDir())
 	fmt.Printf("New Wallpaper: %s\n", file)
 	wallpaper.SetFromFile(file)
 
@@ -103,6 +150,36 @@ func changeWallpaper() {
 	}
 
 	deleteFile(file)
+}
+
+func setupTrayIcon() {
+	sys = &SysTest{desktop.DesktopSysTrayNew()}
+
+	file, err := os.Open("assets/icon.png")
+	if err != nil {
+		panic(err)
+	}
+	icon, _, err := image.Decode(file)
+	if err != nil {
+		panic(err)
+	}
+
+	runningMenuOption := desktop.Menu{Type: desktop.MenuCheckBox, State: true, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning}
+
+	menu := []desktop.Menu{
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
+		runningMenuOption,
+		desktop.Menu{Type: desktop.MenuSeparator},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
+	}
+
+	sys.S.SetIcon(icon)
+	sys.S.SetTitle("RandomWP")
+	sys.S.SetMenu(menu)
+	sys.S.Show()
+
+	desktop.Main()
+
 }
 
 func deleteFile(path string) {
