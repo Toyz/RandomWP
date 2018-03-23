@@ -42,7 +42,7 @@ var (
 func main() {
 	s := single.New("RandomWP")
 	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
-		log.Fatal("another instance of the app is already running, exiting")
+		log.Println("another instance of the app is already running, exiting")
 		os.Exit(0)
 	} else if err != nil {
 		// Another error occurred, might be worth handling it as well
@@ -147,7 +147,7 @@ func handleArgs() {
 	flag.Var(&purity, "purity", "Purity modes (SFW,sketchy)")
 	flag.Var(&res, "res", "Screen resolutions (1024x768,1280x800,1366x768,1280x960,1440x900,1600x900,1280x1024,1600x1200,1680x1050,1920x1080,1920x1200,2560x1440,2560x1600,3840x1080,5760x1080,3840x2160)")
 	flag.Var(&ratios, "ratios", "Aspect ratios (4x3,5x4,16x9,16x10,21x9,32x9,48x9)")
-	flag.Int64Var(&delay, "delay", 30, "Delay between background changes (in seconds)")
+	flag.Int64Var(&delay, "delay", 3600, "Delay between background changes (in seconds)") // defaults to 1 hour
 	flag.BoolVar(&runOnce, "once", false, "Only run the program once")
 	flag.BoolVar(&autoQuit, "quit", false, "Auto quit after task finishes (Only works with once)")
 	flag.BoolVar(&notify, "notify", false, "Show notification when wallpaper changes")
