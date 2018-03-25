@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"image"
-	"log"
 	"os"
 	"strings"
 
@@ -33,7 +32,8 @@ func setupTrayIcon() {
 	}
 
 	ver, _ := Asset("assets/version.txt")
-	log.Println(string(ver))
+	runes := []rune(string(ver))
+	vers := string(runes[0:8])
 
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
@@ -69,7 +69,7 @@ func setupTrayIcon() {
 			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoDelete, Enabled: true, Name: "Auto Delete Image", Action: sys.AutoDeleteImage},
 		}},
 		desktop.Menu{Type: desktop.MenuSeparator},
-		desktop.Menu{Type: desktop.MenuItem, Enabled: false, Name: fmt.Sprintf("Version: %s", ver)},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: false, Name: fmt.Sprintf("Version: %s", vers)},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
