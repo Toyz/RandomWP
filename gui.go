@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/meskio/dialog"
-
 	"github.com/Toyz/RandomWP/desktop"
 	"github.com/Toyz/RandomWP/wallhaven"
 )
@@ -141,10 +139,8 @@ func (m *SysTest) ChangeRatio(mn *desktop.Menu) {
 }
 
 func (m *SysTest) QuitProgram(mn *desktop.Menu) {
-	ok := dialog.Message("%s", "Are you sure you wish to quit?").Title("Are you sure?").YesNo()
-	if ok {
-		os.Exit(0)
-	}
+	os.Exit(0)
+
 }
 
 func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
