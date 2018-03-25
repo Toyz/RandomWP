@@ -15,6 +15,8 @@ type Config struct {
 	//Resolution wallhaven.Resolutions // TODO : Actually make this usable one day
 	// ratios specifies the enabled aspect rations.
 	Ratio wallhaven.Ratios
+	// Auto start on boot
+	AutoStart bool
 	// Send notifications when desktop background changes (Buggy feature)
 	Notify bool
 	// How many seondds to wait before setting the next wallpaper

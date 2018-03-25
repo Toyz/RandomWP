@@ -19,7 +19,7 @@ type SysTest struct {
 	S *desktop.DesktopSysTray
 }
 
-func setupTrayIcon(forever bool) {
+func setupTrayIcon() {
 	sys = &SysTest{desktop.DesktopSysTrayNew()}
 
 	file, err := os.Open(getAsset("icon.png"))
@@ -33,7 +33,7 @@ func setupTrayIcon(forever bool) {
 
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
-		desktop.Menu{Type: desktop.MenuCheckBox, State: forever, Enabled: true, Name: "Run Forever", Action: sys.StopForeverRunning},
+		desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoStart, Enabled: true, Name: "Auto start on load", Action: sys.StopForeverRunning},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Category", Menu: []desktop.Menu{
 			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == wallhaven.CatAnime, Enabled: true, Name: "Anime", Action: sys.ChageCategory},
@@ -194,6 +194,9 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 	} else {
 		running = false
 	}
+
+	conf.AutoStart = running
+	conf.Save()
 }
 
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {

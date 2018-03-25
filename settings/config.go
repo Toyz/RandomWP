@@ -21,6 +21,7 @@ func New(confFile string) *Config {
 		Delay:                  3600,
 		Notify:                 false,
 		AutoDelete:             true, // Default to true unless the user say's other wise in the UI
+		AutoStart:              false,
 		confFile:               confFile,
 	}
 

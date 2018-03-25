@@ -27,8 +27,6 @@ var (
 	// Run Once
 	runOnce bool
 
-	autoQuit bool
-
 	lastID wallhaven.ID
 
 	running bool
@@ -61,22 +59,20 @@ func main() {
 	createOptions()
 
 	rand.Seed(time.Now().Unix())
+
 	if runOnce {
-		if !autoQuit {
-			go changeWallpaper()
-			setupTrayIcon(false)
-		} else {
-			changeWallpaper()
-		}
-	} else {
-		go startEndlessLoop()
-		setupTrayIcon(true)
+		changeWallpaper()
+		os.Exit(0)
 	}
+
+	if conf.AutoStart {
+		go startEndlessLoop()
+	}
+	setupTrayIcon()
 }
 
 func startEndlessLoop() {
 	running = true
-
 	for running {
 		changeWallpaper()
 		time.Sleep(time.Duration(conf.Delay) * time.Second)
@@ -138,12 +134,11 @@ func createOptions() {
 
 func handleArgs() {
 	flag.Var(&conf.Category, "cats", "Wallpaper categories (general,anime,people)")
-	flag.Var(&conf.Purity, "purity", "Purity modes (SFW,sketchy)")
+	flag.Var(&conf.Purity, "purity", "Purity modes (sfw,sketchy)")
 	//flag.Var(&conf, "res", "Screen resolutions (1024x768,1280x800,1366x768,1280x960,1440x900,1600x900,1280x1024,1600x1200,1680x1050,1920x1080,1920x1200,2560x1440,2560x1600,3840x1080,5760x1080,3840x2160)")
 	flag.Var(&conf.Ratio, "ratios", "Aspect ratios (4x3,5x4,16x9,16x10,21x9,32x9,48x9)")
 	flag.Int64Var(&conf.Delay, "delay", 3600, "Delay between background changes (in seconds)") // defaults to 1 hour
 	flag.BoolVar(&runOnce, "once", false, "Only run the program once")
-	flag.BoolVar(&autoQuit, "quit", false, "Auto quit after task finishes (Only works with once)")
 	flag.BoolVar(&conf.Notify, "notify", false, "Show notification when wallpaper changes")
 	flag.Parse()
 }
