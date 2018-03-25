@@ -33,7 +33,7 @@ func setupTrayIcon() {
 
 	ver, _ := Asset("assets/version.txt")
 	runes := []rune(string(ver))
-	vers := string(runes[0:8])
+	vers := string(runes[0:7])
 
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
