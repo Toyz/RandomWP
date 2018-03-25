@@ -71,7 +71,7 @@ func setupTrayIcon(forever bool) {
 }
 
 func (m *SysTest) ChangeBackground(mn *desktop.Menu) {
-	changeWallpaper()
+	go changeWallpaper()
 }
 
 func (m *SysTest) SendNotification(mn *desktop.Menu) {
