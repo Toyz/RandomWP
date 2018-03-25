@@ -27,6 +27,9 @@ type Config struct {
 	// Auto delete the image that was set...
 	AutoDelete bool
 
+	// Last Image ID
+	LastImageID wallhaven.ID
+
 	/* Private */
 	confFile string
 }

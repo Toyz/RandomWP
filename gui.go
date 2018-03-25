@@ -186,6 +186,7 @@ func (m *SysTest) QuitProgram(mn *desktop.Menu) {
 	yes, _ := dlgs.Question("Are you sure?", "Are you sure you wish to quit?", true)
 
 	if yes {
+		conf.Save()
 		os.Exit(0)
 	}
 
@@ -207,11 +208,12 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 }
 
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
-	c1 := make(chan string)
+	if conf.LastImageID <= 0 {
+		dlgs.Error("Saved Image Failed", "Last image ID was less then zero\nThis happens when you first run!")
+		return
+	}
 	go func() {
-		p, _ := lastID.Download(conf.SaveCurrentImageFolder)
-		c1 <- p
+		p, _ := conf.LastImageID.Download(conf.SaveCurrentImageFolder)
+		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
-
-	dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", <-c1))
 }

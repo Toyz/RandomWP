@@ -33,3 +33,5 @@ build:
     paths:
       - RandomWP_x86.exe
       - RandomWP_x64.exe
+  only:
+    - master
