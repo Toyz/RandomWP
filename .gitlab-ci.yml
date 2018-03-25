@@ -9,7 +9,7 @@ stages:
 before_script:
   - sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories
   - apk upgrade --update-cache --available
-  - apk --no-cache add git gzip gcc musl-dev tree
+  - apk --no-cache add git gzip gcc musl-dev tree git
   - apk --no-cache add go
   - mkdir -p /goSrc/src/github.com/Toyz
   - cp -r /builds/Toyz/RandomWP /goSrc/src/github.com/Toyz/RandomWP
@@ -18,6 +18,7 @@ before_script:
   - go get -u github.com/shuLhan/go-bindata/...
   - export PATH=$PATH:/goSrc/bin
   - cd /goSrc/src/github.com/Toyz/RandomWP
+  - git rev-parse HEAD > ./assets/version.txt
   - mkdir $CI_PROJECT_DIR/output
 
 build:

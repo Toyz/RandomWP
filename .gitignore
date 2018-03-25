@@ -26,3 +26,4 @@ debug
 *.zip
 
 bindata.go
+assets/version.txt
