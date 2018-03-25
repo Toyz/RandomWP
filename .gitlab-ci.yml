@@ -1,4 +1,4 @@
-image: docker:latest
+image: portown:alpine-mingw-w64
 services:
     - docker:dind
     
