@@ -207,11 +207,12 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 }
 
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
-	c1 := make(chan string)
+	if lastID <= 0 {
+		dlgs.Error("Saved Image Failed", "Last image ID was less then zero\nThis happens when you first run!")
+		return
+	}
 	go func() {
 		p, _ := lastID.Download(conf.SaveCurrentImageFolder)
-		c1 <- p
+		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
-
-	dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", <-c1))
 }
