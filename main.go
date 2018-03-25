@@ -6,9 +6,13 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path"
 	"strconv"
 	"time"
 
+	"github.com/Toyz/RandomWP/desktop"
+
+	"github.com/Toyz/RandomWP/settings"
 	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/Toyz/RandomWP/wallpaper"
 	"github.com/gen2brain/beeep"
@@ -17,20 +21,10 @@ import (
 
 var (
 	options = make([]wallhaven.Option, 0)
-	// cats specifies the enabled wallpaper categories.
-	cats wallhaven.Categories
-	// purity specifies the enabled purity modes.
-	purity wallhaven.Purity
-	// res specifies the enabled screen resolutions.
-	res wallhaven.Resolutions
-	// ratios specifies the enabled aspect rations.
-	ratios wallhaven.Ratios
+
+	conf *settings.Config
 	// Run Once
 	runOnce bool
-	// Delay for loop between changes
-	delay int64
-	// Send notifcations (default false)
-	notify bool
 
 	autoQuit bool
 
@@ -49,6 +43,17 @@ func main() {
 		log.Fatalf("failed to acquire exclusive app lock: %v", err)
 	}
 	defer s.TryUnlock()
+
+	confFolder := path.Join(desktop.GetDocumentsFolder(), "RandomWP")
+	assetPath = path.Join(confFolder, "assets")
+	createFolder(confFolder)
+	createFolder(assetPath)
+
+	saveAssets()
+
+	conf = settings.New(path.Join(confFolder, "config.json"))
+
+	createFolder(conf.SaveFolder)
 
 	handleArgs()
 	createOptions()
@@ -72,7 +77,7 @@ func startEndlessLoop() {
 
 	for running {
 		changeWallpaper()
-		time.Sleep(time.Duration(delay) * time.Second)
+		time.Sleep(time.Duration(conf.Delay) * time.Second)
 	}
 }
 
@@ -100,56 +105,36 @@ func changeWallpaper() {
 		}
 	}
 	fmt.Printf("Current wallpaper: %s\n", background)
-	file, _ := lastID.Download(os.TempDir())
+	file, _ := lastID.Download(conf.SaveFolder)
 	fmt.Printf("New Wallpaper: %s\n", file)
 	wallpaper.SetFromFile(file)
 
-	if notify {
-		err = beeep.Notify("Changed Wallpaper", "Your wallpaper has been changed", "assets/information.png")
+	if conf.Notify {
+		err = beeep.Notify("Changed Wallpaper", "Your wallpaper has been changed", getAsset("information.png"))
 		isError(err)
 	}
 
-	deleteFile(file)
+	if conf.AutoDelete {
+		deleteFile(file)
+	}
 }
 
 func createOptions() {
 	options = make([]wallhaven.Option, 0)
-
-	if cats != 0 {
-		options = append(options, cats)
-	} else {
-		options = append(options, wallhaven.CatGeneral)
-		cats = wallhaven.CatGeneral
-	}
-
-	if purity != 0 {
-		options = append(options, purity)
-	} else {
-		options = append(options, wallhaven.PuritySFW)
-		purity = wallhaven.PuritySFW
-	}
-
-	if ratios != 0 {
-		options = append(options, ratios)
-	} else {
-		options = append(options, wallhaven.Ratio16x9)
-		ratios = wallhaven.Ratio16x9
-	}
-
-	if res != 0 {
-		options = append(options, res)
-	}
-
+	options = append(options, conf.Category)
+	options = append(options, conf.Purity)
+	options = append(options, conf.Ratio)
+	//options = append(options, res) // TODO: Fixme
 }
 
 func handleArgs() {
-	flag.Var(&cats, "cats", "Wallpaper categories (general,anime,people)")
-	flag.Var(&purity, "purity", "Purity modes (SFW,sketchy)")
-	flag.Var(&res, "res", "Screen resolutions (1024x768,1280x800,1366x768,1280x960,1440x900,1600x900,1280x1024,1600x1200,1680x1050,1920x1080,1920x1200,2560x1440,2560x1600,3840x1080,5760x1080,3840x2160)")
-	flag.Var(&ratios, "ratios", "Aspect ratios (4x3,5x4,16x9,16x10,21x9,32x9,48x9)")
-	flag.Int64Var(&delay, "delay", 3600, "Delay between background changes (in seconds)") // defaults to 1 hour
+	flag.Var(&conf.Category, "cats", "Wallpaper categories (general,anime,people)")
+	flag.Var(&conf.Purity, "purity", "Purity modes (SFW,sketchy)")
+	//flag.Var(&conf, "res", "Screen resolutions (1024x768,1280x800,1366x768,1280x960,1440x900,1600x900,1280x1024,1600x1200,1680x1050,1920x1080,1920x1200,2560x1440,2560x1600,3840x1080,5760x1080,3840x2160)")
+	flag.Var(&conf.Ratio, "ratios", "Aspect ratios (4x3,5x4,16x9,16x10,21x9,32x9,48x9)")
+	flag.Int64Var(&conf.Delay, "delay", 3600, "Delay between background changes (in seconds)") // defaults to 1 hour
 	flag.BoolVar(&runOnce, "once", false, "Only run the program once")
 	flag.BoolVar(&autoQuit, "quit", false, "Auto quit after task finishes (Only works with once)")
-	flag.BoolVar(&notify, "notify", false, "Show notification when wallpaper changes")
+	flag.BoolVar(&conf.Notify, "notify", false, "Show notification when wallpaper changes")
 	flag.Parse()
 }

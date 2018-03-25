@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"path"
 )
 
 func deleteFile(path string) {
@@ -25,4 +26,27 @@ func isError(err error) bool {
 
 func random(min, max int) int {
 	return rand.Intn(max-min) + min
+}
+
+func createFolder(folder string) {
+	os.MkdirAll(folder, 0644)
+}
+
+func execFolder() string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := path.Dir(ex)
+
+	return exPath
+}
+
+func fileExist(name string) bool {
+	if _, err := os.Stat(name); err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
 }

@@ -24,3 +24,5 @@ bindata.go
 .vscode
 debug
 *.zip
+
+bindata.go
