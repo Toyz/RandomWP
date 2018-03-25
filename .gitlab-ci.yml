@@ -9,7 +9,7 @@ stages:
 before_script:
   - sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories
   - apk upgrade --update-cache --available
-  - apk --no-cache add git gzip gcc musl-dev tree
+  - apk --no-cache add git gzip gcc musl-dev tree gtk+3.0
   - apk --no-cache add go
   - mkdir -p /goSrc/src/github.com/Toyz
   - cp -r /builds/Toyz/RandomWP /goSrc/src/github.com/Toyz/RandomWP

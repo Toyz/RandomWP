@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Toyz/RandomWP/desktop"
+	"github.com/meskio/dialog"
 
 	"github.com/Toyz/RandomWP/settings"
 	"github.com/Toyz/RandomWP/wallhaven"
@@ -37,6 +38,7 @@ func main() {
 	s := single.New("RandomWP")
 	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
 		log.Println("another instance of the app is already running, exiting")
+		dialog.Message("%s", "Another instance is already running").Title("Already Running").Error()
 		os.Exit(0)
 	} else if err != nil {
 		// Another error occurred, might be worth handling it as well

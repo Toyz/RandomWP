@@ -4,6 +4,10 @@
 	"GodepVersion": "v80",
 	"Deps": [
 		{
+			"ImportPath": "github.com/AllenDang/w32",
+			"Rev": "9a4ee0f7d224efbff75947fa7060daadccc4741c"
+		},
+		{
 			"ImportPath": "github.com/PuerkitoBio/goquery",
 			"Comment": "v1.3.0-6-g61aa197",
 			"Rev": "61aa1975b1f7856927c526b0e0cd8c8b3a3030d0"
@@ -27,8 +31,37 @@
 			"Rev": "82b322028c96512b15077093b16a5f1c7ea897ac"
 		},
 		{
+			"ImportPath": "github.com/gotk3/gotk3/cairo",
+			"Comment": "GOTK3_0_2_0-643-ge6314b1",
+			"Rev": "e6314b1c74002b139f2b49f96cee7ded7cd4f2a8"
+		},
+		{
+			"ImportPath": "github.com/gotk3/gotk3/gdk",
+			"Comment": "GOTK3_0_2_0-643-ge6314b1",
+			"Rev": "e6314b1c74002b139f2b49f96cee7ded7cd4f2a8"
+		},
+		{
+			"ImportPath": "github.com/gotk3/gotk3/glib",
+			"Comment": "GOTK3_0_2_0-643-ge6314b1",
+			"Rev": "e6314b1c74002b139f2b49f96cee7ded7cd4f2a8"
+		},
+		{
+			"ImportPath": "github.com/gotk3/gotk3/gtk",
+			"Comment": "GOTK3_0_2_0-643-ge6314b1",
+			"Rev": "e6314b1c74002b139f2b49f96cee7ded7cd4f2a8"
+		},
+		{
+			"ImportPath": "github.com/gotk3/gotk3/pango",
+			"Comment": "GOTK3_0_2_0-643-ge6314b1",
+			"Rev": "e6314b1c74002b139f2b49f96cee7ded7cd4f2a8"
+		},
+		{
 			"ImportPath": "github.com/marcsauter/single",
 			"Rev": "bb0da22c1992c00302f04300beecc5b9b652aecb"
+		},
+		{
+			"ImportPath": "github.com/meskio/dialog",
+			"Rev": "92cbabd0a888904af27d70889809e3eeef1c1965"
 		},
 		{
 			"ImportPath": "github.com/mewkiz/pkg/errutil",
@@ -45,6 +78,10 @@
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",
 			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+		},
+		{
+			"ImportPath": "github.com/sqweek/dialog/cocoa",
+			"Rev": "2f9d9e5dd848a3bad4bdd0210c73bb90c13a3791"
 		},
 		{
 			"ImportPath": "golang.org/x/net/html",
