@@ -5,6 +5,8 @@ import "github.com/Toyz/RandomWP/wallhaven"
 type Config struct {
 	// Folder to save images too defaults to RandomWP in pictures fodler
 	SaveFolder string
+	// Save current image to given folder (Defaults: Desktop)
+	SaveCurrentImageFolder string
 	// cats specifies the enabled wallpaper categories.
 	Category wallhaven.Categories
 	// purity specifies the enabled purity modes.

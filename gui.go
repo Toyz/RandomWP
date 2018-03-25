@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"os"
 	"strings"
@@ -57,8 +58,12 @@ func setupTrayIcon(forever bool) {
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Save Current Image", Action: sys.SaveCurrentImage},
 		desktop.Menu{Type: desktop.MenuSeparator},
-		desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Notify, Enabled: true, Name: "Notify on Change", Action: sys.SendNotification},
-		desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoDelete, Enabled: true, Name: "Auto Delete Image", Action: sys.AutoDeleteImage},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Setting", Menu: []desktop.Menu{
+			desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change current image folder", Action: sys.ChangeCurrentImageSaveFolder},
+			desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change cache folder", Action: sys.ChangeImageCacheFolder},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Notify, Enabled: true, Name: "Notify on Change", Action: sys.SendNotification},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoDelete, Enabled: true, Name: "Auto Delete Image", Action: sys.AutoDeleteImage},
+		}},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
@@ -73,6 +78,38 @@ func setupTrayIcon(forever bool) {
 
 func (m *SysTest) ChangeBackground(mn *desktop.Menu) {
 	go changeWallpaper()
+}
+
+func (m *SysTest) ChangeImageCacheFolder(mn *desktop.Menu) {
+	folder, ok, err := dlgs.File("Select cache folder", "", true)
+	if isError(err) {
+		dlgs.Error("Something Happened", err.Error())
+		return
+	}
+
+	if !ok {
+		return
+	}
+
+	conf.SaveFolder = folder
+	conf.Save()
+	dlgs.Info("Changed Cache Folder", fmt.Sprintf("Cache folder has been set to:\n\n%s", folder))
+}
+
+func (m *SysTest) ChangeCurrentImageSaveFolder(mn *desktop.Menu) {
+	folder, ok, err := dlgs.File("Select save current folder", "", true)
+	if isError(err) {
+		dlgs.Error("Something Happened", err.Error())
+		return
+	}
+
+	if !ok {
+		return
+	}
+
+	conf.SaveCurrentImageFolder = folder
+	conf.Save()
+	dlgs.Info("Changed Folder for saving", fmt.Sprintf("Folder for saving the current image is now at:\n\n%s", folder))
 }
 
 func (m *SysTest) SendNotification(mn *desktop.Menu) {
@@ -160,7 +197,5 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 }
 
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
-	desktopFolder := desktop.GetDesktopFolder() // will be changed when settings are a thing
-
-	go lastID.Download(desktopFolder)
+	go lastID.Download(conf.SaveCurrentImageFolder)
 }

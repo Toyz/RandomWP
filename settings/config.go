@@ -13,14 +13,15 @@ import (
 
 func New(confFile string) *Config {
 	conf := &Config{
-		SaveFolder: path.Join(desktop.GetDocumentsFolder(), "RandomWP", "pics"),
-		Category:   wallhaven.CatGeneral,
-		Purity:     wallhaven.PuritySFW,
-		Ratio:      wallhaven.Ratio16x9,
-		Delay:      3600,
-		Notify:     false,
-		AutoDelete: true, // Default to true unless the user say's other wise in the UI
-		confFile:   confFile,
+		SaveFolder:             path.Join(desktop.GetDocumentsFolder(), "RandomWP", "pics"),
+		SaveCurrentImageFolder: desktop.GetDesktopFolder(),
+		Category:               wallhaven.CatGeneral,
+		Purity:                 wallhaven.PuritySFW,
+		Ratio:                  wallhaven.Ratio16x9,
+		Delay:                  3600,
+		Notify:                 false,
+		AutoDelete:             true, // Default to true unless the user say's other wise in the UI
+		confFile:               confFile,
 	}
 
 	if fileExist(confFile) {
