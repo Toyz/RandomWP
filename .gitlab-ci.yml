@@ -1,4 +1,4 @@
-image: portown:alpine-mingw-w64
+image: "portown/alpine-mingw-w64:latest"
 services:
     - docker:dind
     
