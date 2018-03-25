@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"os"
 	"path"
-	"strconv"
 	"time"
 
 	"github.com/Toyz/RandomWP/desktop"
@@ -26,8 +25,6 @@ var (
 	conf *settings.Config
 	// Run Once
 	runOnce bool
-
-	lastID wallhaven.ID
 
 	running bool
 )
@@ -82,22 +79,11 @@ func startEndlessLoop() {
 func changeWallpaper() {
 	createOptions()
 	var page wallhaven.Page
-	page.Set(strconv.Itoa(random(1, 3))) // between 1 or 2...
+	page = 1
 	options = append(options, page)
 	options = append(options, wallhaven.SortRandom)
 
 	havenIDs, _ := wallhaven.Search("", options...)
-
-	for len(havenIDs) <= 0 {
-		createOptions()
-
-		var p wallhaven.Page
-		p.Set(strconv.Itoa(random(1, 3)))
-		options = append(options, p)
-		options = append(options, wallhaven.SortRandom)
-		havenIDs, _ = wallhaven.Search("", options...)
-	}
-
 	background, err := wallpaper.Get()
 
 	if isError(err) {
@@ -105,15 +91,18 @@ func changeWallpaper() {
 	}
 
 	currID := havenIDs[rand.Intn(len(havenIDs))]
-	if lastID != currID {
-		lastID = currID
+	if conf.LastImageID != currID {
+		conf.LastImageID = currID
 	} else {
-		for currID != lastID {
-			lastID = havenIDs[rand.Intn(len(havenIDs))]
+		for currID != conf.LastImageID {
+			conf.LastImageID = havenIDs[rand.Intn(len(havenIDs))]
 		}
 	}
+
+	conf.Save()
+
 	fmt.Printf("Current wallpaper: %s\n", background)
-	file, _ := lastID.Download(conf.SaveFolder)
+	file, _ := conf.LastImageID.Download(conf.SaveFolder)
 	fmt.Printf("New Wallpaper: %s\n", file)
 	wallpaper.SetFromFile(file)
 
