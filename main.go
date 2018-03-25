@@ -88,9 +88,12 @@ func changeWallpaper() {
 
 	havenIDs, _ := wallhaven.Search("", options...)
 
-	if len(havenIDs) <= 0 {
-		page = 1
-		options = append(options, page)
+	for len(havenIDs) <= 0 {
+		createOptions()
+
+		var p wallhaven.Page
+		p.Set(strconv.Itoa(random(1, 3)))
+		options = append(options, p)
 		options = append(options, wallhaven.SortRandom)
 		havenIDs, _ = wallhaven.Search("", options...)
 	}
