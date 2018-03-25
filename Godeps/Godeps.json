@@ -1,0 +1,80 @@
+{
+	"ImportPath": "github.com/Toyz/RandomWP",
+	"GoVersion": "go1.10",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/PuerkitoBio/goquery",
+			"Comment": "v1.3.0-6-g61aa197",
+			"Rev": "61aa1975b1f7856927c526b0e0cd8c8b3a3030d0"
+		},
+		{
+			"ImportPath": "github.com/andybalholm/cascadia",
+			"Comment": "v1.0.0",
+			"Rev": "901648c87902174f774fac311d7f176f8647bdaa"
+		},
+		{
+			"ImportPath": "github.com/gen2brain/beeep",
+			"Rev": "982e34175ed3b8dc0d100fb0f0b06d8e2639ec4e"
+		},
+		{
+			"ImportPath": "github.com/godbus/dbus",
+			"Comment": "v4.1.0-6-g885f9cc",
+			"Rev": "885f9cc04c9c1a6a61a2008e211d36c5737be3f5"
+		},
+		{
+			"ImportPath": "github.com/gopherjs/gopherjs/js",
+			"Rev": "82b322028c96512b15077093b16a5f1c7ea897ac"
+		},
+		{
+			"ImportPath": "github.com/marcsauter/single",
+			"Rev": "bb0da22c1992c00302f04300beecc5b9b652aecb"
+		},
+		{
+			"ImportPath": "github.com/mewkiz/pkg/errutil",
+			"Rev": "c19a6f9fa6f8bc8710e243710ee205c13688b998"
+		},
+		{
+			"ImportPath": "github.com/mewkiz/pkg/term",
+			"Rev": "c19a6f9fa6f8bc8710e243710ee205c13688b998"
+		},
+		{
+			"ImportPath": "github.com/nfnt/resize",
+			"Rev": "83c6a9932646f83e3267f353373d47347b6036b2"
+		},
+		{
+			"ImportPath": "github.com/nu7hatch/gouuid",
+			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html",
+			"Rev": "6078986fec03a1dcc236c34816c71b0e05018fda"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html/atom",
+			"Rev": "6078986fec03a1dcc236c34816c71b0e05018fda"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/windows",
+			"Rev": "91ee8cde435411ca3f1cd365e8f20131aed4d0a1"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/windows/registry",
+			"Rev": "91ee8cde435411ca3f1cd365e8f20131aed4d0a1"
+		},
+		{
+			"ImportPath": "gopkg.in/ini.v1",
+			"Comment": "v1.33.0",
+			"Rev": "6333e38ac20b8949a8dd68baa3650f4dee8f39f0"
+		},
+		{
+			"ImportPath": "gopkg.in/toast.v1",
+			"Rev": "b700e246b8b6d3e13554091e540e1019e26389f1"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Comment": "v2.1.1",
+			"Rev": "7f97868eec74b32b0982dd158a51a446d1da7eb5"
+		}
+	]
+}
