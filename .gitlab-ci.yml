@@ -18,7 +18,7 @@ before_script:
   - go get -u github.com/shuLhan/go-bindata/...
   - export PATH=$PATH:/goSrc/bin
   - cd /goSrc/src/github.com/Toyz/RandomWP
-  - mkdir output
+  - mkdir $CI_PROJECT_DIR/output
 
 build:
   stage: build
@@ -26,8 +26,8 @@ build:
     - godep restore -v
     - go-bindata ./assets/...
     # - CGO_ENABLED=0 GOOS=linux godep go build -o pw -a -installsuffix cgo -ldflags '-w -s'
-    - CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags '-H windowsgui' -o ./output/RandomWP_x86.exe
-    - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags '-H windowsgui'  -o ./output/RandomWP_x64.exe
+    - CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/output/RandomWP_x86.exe
+    - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags '-H windowsgui'  -o $CI_PROJECT_DIR/output/RandomWP_x64.exe
   artifacts:
     paths:
       - output
