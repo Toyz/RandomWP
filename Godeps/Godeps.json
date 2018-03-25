@@ -18,6 +18,10 @@
 			"Rev": "982e34175ed3b8dc0d100fb0f0b06d8e2639ec4e"
 		},
 		{
+			"ImportPath": "github.com/gen2brain/dlgs",
+			"Rev": "01a5f5a61d1883f3329fac666200c6f573f5196e"
+		},
+		{
 			"ImportPath": "github.com/godbus/dbus",
 			"Comment": "v4.1.0-6-g885f9cc",
 			"Rev": "885f9cc04c9c1a6a61a2008e211d36c5737be3f5"

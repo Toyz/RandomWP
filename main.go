@@ -16,6 +16,7 @@ import (
 	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/Toyz/RandomWP/wallpaper"
 	"github.com/gen2brain/beeep"
+	"github.com/gen2brain/dlgs"
 	"github.com/marcsauter/single"
 )
 
@@ -37,6 +38,7 @@ func main() {
 	s := single.New("RandomWP")
 	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
 		log.Println("another instance of the app is already running, exiting")
+		dlgs.Error("Already Running!", "Looks like another instance is already running!")
 		os.Exit(0)
 	} else if err != nil {
 		// Another error occurred, might be worth handling it as well
@@ -89,6 +91,13 @@ func changeWallpaper() {
 	options = append(options, wallhaven.SortRandom)
 
 	havenIDs, _ := wallhaven.Search("", options...)
+
+	if len(havenIDs) <= 0 {
+		page = 1
+		options = append(options, page)
+		options = append(options, wallhaven.SortRandom)
+		havenIDs, _ = wallhaven.Search("", options...)
+	}
 
 	background, err := wallpaper.Get()
 

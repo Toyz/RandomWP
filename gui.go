@@ -7,6 +7,7 @@ import (
 
 	"github.com/Toyz/RandomWP/desktop"
 	"github.com/Toyz/RandomWP/wallhaven"
+	"github.com/gen2brain/dlgs"
 )
 
 var (
@@ -139,7 +140,11 @@ func (m *SysTest) ChangeRatio(mn *desktop.Menu) {
 }
 
 func (m *SysTest) QuitProgram(mn *desktop.Menu) {
-	os.Exit(0)
+	yes, _ := dlgs.Question("Are you sure?", "Are you sure you wish to quit?", true)
+
+	if yes {
+		os.Exit(0)
+	}
 
 }
 
