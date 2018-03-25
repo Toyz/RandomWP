@@ -11,8 +11,11 @@ type Config struct {
 	Category wallhaven.Categories
 	// purity specifies the enabled purity modes.
 	Purity wallhaven.Purity
+
+	// TODO: Actually make this usable one day
 	// res specifies the enabled screen resolutions.
-	//Resolution wallhaven.Resolutions // TODO : Actually make this usable one day
+	//Resolution wallhaven.Resolutions
+
 	// ratios specifies the enabled aspect rations.
 	Ratio wallhaven.Ratios
 	// Auto start on boot
