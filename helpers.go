@@ -5,8 +5,6 @@ import (
 	"math/rand"
 	"os"
 	"path"
-	"reflect"
-	"unsafe"
 )
 
 func deleteFile(path string) {
@@ -42,12 +40,6 @@ func execFolder() string {
 	exPath := path.Dir(ex)
 
 	return exPath
-}
-
-func bytesToString(b []byte) string {
-	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	sh := reflect.StringHeader{bh.Data, bh.Len}
-	return *(*string)(unsafe.Pointer(&sh))
 }
 
 func fileExist(name string) bool {

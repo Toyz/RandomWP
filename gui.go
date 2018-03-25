@@ -207,5 +207,11 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 }
 
 func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
-	go lastID.Download(conf.SaveCurrentImageFolder)
+	c1 := make(chan string)
+	go func() {
+		p, _ := lastID.Download(conf.SaveCurrentImageFolder)
+		c1 <- p
+	}()
+
+	dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", <-c1))
 }
