@@ -25,8 +25,8 @@ build:
     - godep restore -v
     - go-bindata ./assets/...
     # - CGO_ENABLED=0 GOOS=linux godep go build -o pw -a -installsuffix cgo -ldflags '-w -s'
-    - CGO_ENABLED=1 GOOS=windows GOARCH=386 CC="x86_64-w64-mingw32-gcc -fno-stack-protector -D_FORTIFY_SOURCE=0 -lssp" go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/output/RandomWP_x86.exe
-    - CGO_ENABLED=1 GOOS=windows GOARCH=amd64 CC="x86_64-w64-mingw32-gcc -fno-stack-protector -D_FORTIFY_SOURCE=0 -lssp" go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/output/RandomWP_x64.exe
+    - CGO_ENABLED=1 GOOS=windows GOARCH=386 CC="x86_64-w64-mingw32-gcc -fvisibility=hidden -static-libgcc -fno-stack-protector -D_FORTIFY_SOURCE=0 -lssp" go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/output/RandomWP_x86.exe
+    - CGO_ENABLED=1 GOOS=windows GOARCH=amd64 CC="x86_64-w64-mingw32-gcc -fvisibility=hidden -static-libgcc -fno-stack-protector -D_FORTIFY_SOURCE=0 -lssp" go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/output/RandomWP_x64.exe
   artifacts:
     paths:
       - output
