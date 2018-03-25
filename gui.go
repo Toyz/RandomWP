@@ -190,12 +190,13 @@ func (m *SysTest) StopForeverRunning(mn *desktop.Menu) {
 	m.S.Update()
 
 	if mn.State {
+		conf.AutoStart = true
 		go startEndlessLoop()
 	} else {
+		conf.AutoStart = false
 		running = false
 	}
 
-	conf.AutoStart = running
 	conf.Save()
 }
 
