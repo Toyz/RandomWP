@@ -26,7 +26,6 @@ type Config struct {
 	Delay int64
 	// Auto delete the image that was set...
 	AutoDelete bool
-
 	// Last Image ID
 	LastImageID wallhaven.ID
 

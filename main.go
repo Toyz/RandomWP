@@ -27,6 +27,9 @@ var (
 	runOnce bool
 
 	running bool
+
+	CurrentVersion      string
+	CurrentVersionShort string
 )
 
 func main() {
@@ -40,6 +43,11 @@ func main() {
 		log.Fatalf("failed to acquire exclusive app lock: %v", err)
 	}
 	defer s.TryUnlock()
+
+	ver, _ := Asset("assets/version.txt")
+	runes := []rune(string(ver))
+	CurrentVersionShort = string(runes[0:7])
+	CurrentVersion = string(ver)
 
 	confFolder := path.Join(desktop.GetDocumentsFolder(), "RandomWP")
 	assetPath = path.Join(confFolder, "assets")
@@ -90,6 +98,11 @@ func changeWallpaper() {
 		return
 	}
 
+	if len(havenIDs) <= 0 {
+		time.Sleep(30 * time.Second)
+		changeWallpaper()
+		return
+	}
 	currID := havenIDs[rand.Intn(len(havenIDs))]
 	if conf.LastImageID != currID {
 		conf.LastImageID = currID
