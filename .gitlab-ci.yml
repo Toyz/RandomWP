@@ -21,7 +21,10 @@ before_script:
   - git rev-parse HEAD > ./assets/version.txt
   - mkdir $CI_PROJECT_DIR/output
 
-build:
+stages:
+  - build
+
+build-releaes:
   stage: build
   script:
     - godep restore -v
@@ -35,3 +38,18 @@ build:
       - RandomWP_x64.exe
   only:
     - master
+  
+build-debug:
+  stage: build
+  script:
+    - godep restore -v
+    - go-bindata ./assets/...
+    # - CGO_ENABLED=0 GOOS=linux godep go build -o pw -a -installsuffix cgo -ldflags '-w -s'
+    - CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags '-H windowsgui' -o $CI_PROJECT_DIR/RandomWP_x86_debug.exe
+    - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags '-H windowsgui'  -o $CI_PROJECT_DIR/RandomWP_x64_debug.exe
+  artifacts:
+    paths:
+      - RandomWP_x86_debug.exe
+      - RandomWP_x64_debug.exe
+  only:
+    - develop

@@ -9,6 +9,10 @@
 			"Rev": "61aa1975b1f7856927c526b0e0cd8c8b3a3030d0"
 		},
 		{
+			"ImportPath": "github.com/Toyz/GoHaven",
+			"Rev": "16b40309ce419501c0f9e68fdba17894b5b4492d"
+		},
+		{
 			"ImportPath": "github.com/andybalholm/cascadia",
 			"Comment": "v1.0.0",
 			"Rev": "901648c87902174f774fac311d7f176f8647bdaa"
