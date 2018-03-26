@@ -7,8 +7,10 @@ import (
 	"strings"
 
 	"github.com/Toyz/RandomWP/desktop"
+	"github.com/Toyz/RandomWP/updater"
 	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/gen2brain/dlgs"
+	"github.com/skratchdot/open-golang/open"
 )
 
 var (
@@ -30,10 +32,6 @@ func setupTrayIcon() {
 	if err != nil {
 		panic(err)
 	}
-
-	ver, _ := Asset("assets/version.txt")
-	runes := []rune(string(ver))
-	vers := string(runes[0:7])
 
 	menu := []desktop.Menu{
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Background", Action: sys.ChangeBackground},
@@ -67,9 +65,11 @@ func setupTrayIcon() {
 			desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change cache folder", Action: sys.ChangeImageCacheFolder},
 			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Notify, Enabled: true, Name: "Notify on Change", Action: sys.SendNotification},
 			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoDelete, Enabled: true, Name: "Auto Delete Image", Action: sys.AutoDeleteImage},
+			desktop.Menu{Type: desktop.MenuSeparator},
+			desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Check for Update", Action: sys.CheckForUpdate},
 		}},
 		desktop.Menu{Type: desktop.MenuSeparator},
-		desktop.Menu{Type: desktop.MenuItem, Enabled: false, Name: fmt.Sprintf("Version: %s", vers)},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: false, Name: fmt.Sprintf("Version: %s", CurrentVersionShort)},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Quit", Action: sys.QuitProgram},
 	}
@@ -216,4 +216,21 @@ func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 		p, _ := conf.LastImageID.Download(conf.SaveCurrentImageFolder)
 		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
+}
+
+func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
+	mn.Enabled = false
+	go func(t *SysTest, m *desktop.Menu) {
+		updater.GitUpdater.LoadStatus()
+
+		if !strings.EqualFold(updater.GitUpdater.GetSHASum(), CurrentVersion) {
+			ok, _ := dlgs.Question("New Version available", "Do you wish to goto the current build page?", true)
+			if ok {
+				open.Run("https://gitlab.com/Toyz/RandomWP/-/jobs/artifacts/master/browse?job=build")
+			}
+		}
+		m.Enabled = false
+		t.S.Update()
+	}(m, mn)
+	m.S.Update()
 }
