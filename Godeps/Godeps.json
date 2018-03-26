@@ -43,6 +43,10 @@
 			"Rev": "c19a6f9fa6f8bc8710e243710ee205c13688b998"
 		},
 		{
+			"ImportPath": "github.com/moul/http2curl",
+			"Rev": "9ac6cf4d929b2fa8fd2d2e6dec5bb0feb4f4911d"
+		},
+		{
 			"ImportPath": "github.com/nfnt/resize",
 			"Rev": "83c6a9932646f83e3267f353373d47347b6036b2"
 		},
@@ -51,11 +55,29 @@
 			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
 		},
 		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.15-24-g8e3aed2",
+			"Rev": "8e3aed27fe49f7fdc765dad067845f600fc984e8"
+		},
+		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.0-12-g816c908",
+			"Rev": "816c9085562cd7ee03e7f8188a1cfd942858cded"
+		},
+		{
+			"ImportPath": "github.com/skratchdot/open-golang/open",
+			"Rev": "75fb7ed4208cf72d323d7d02fd1a5964a7a9073c"
+		},
+		{
 			"ImportPath": "golang.org/x/net/html",
 			"Rev": "6078986fec03a1dcc236c34816c71b0e05018fda"
 		},
 		{
 			"ImportPath": "golang.org/x/net/html/atom",
+			"Rev": "6078986fec03a1dcc236c34816c71b0e05018fda"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
 			"Rev": "6078986fec03a1dcc236c34816c71b0e05018fda"
 		},
 		{
