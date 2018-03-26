@@ -225,6 +225,7 @@ func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
 
 		if !updater.GitUpdater.IsStable() {
 			dlgs.Info("No New Version", "There is currently no new version!")
+			return
 		}
 
 		if !strings.EqualFold(updater.GitUpdater.GetSHASum(), CurrentVersion) {
