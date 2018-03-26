@@ -223,11 +223,17 @@ func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
 	go func(t *SysTest, m *desktop.Menu) {
 		updater.GitUpdater.LoadStatus()
 
+		if !updater.GitUpdater.IsStable() {
+			dlgs.Info("No New Version", "There is currently no new version!")
+		}
+
 		if !strings.EqualFold(updater.GitUpdater.GetSHASum(), CurrentVersion) {
 			ok, _ := dlgs.Question("New Version available", "Do you wish to goto the current build page?", true)
 			if ok {
 				open.Run("https://gitlab.com/Toyz/RandomWP/-/jobs/artifacts/master/browse?job=build")
 			}
+		} else {
+			dlgs.Info("No New Version", "There is currently no new version!")
 		}
 		m.Enabled = false
 		t.S.Update()

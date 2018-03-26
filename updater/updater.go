@@ -31,3 +31,13 @@ func (git *Updater) GetSHASum() string {
 
 	return urlParts[len(urlParts)-1]
 }
+
+func (git *Updater) IsStable() bool {
+	if git == nil {
+		return false
+	}
+
+	data := git.Statues[0]
+
+	return strings.EqualFold(data.State, "success")
+}
