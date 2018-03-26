@@ -39,7 +39,7 @@ build-releaes:
   only:
     - master
   
-build-debug:
+build-nightly:
   stage: build
   script:
     - godep restore -v

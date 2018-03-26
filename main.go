@@ -30,6 +30,8 @@ var (
 
 	CurrentVersion      string
 	CurrentVersionShort string
+
+	WallHaven *GoHaven.WallHaven
 )
 
 func main() {
@@ -43,6 +45,8 @@ func main() {
 		log.Fatalf("failed to acquire exclusive app lock: %v", err)
 	}
 	defer s.TryUnlock()
+
+	WallHaven = GoHaven.New()
 
 	ver, _ := Asset("assets/version.txt")
 	runes := []rune(string(ver))
@@ -91,7 +95,7 @@ func changeWallpaper() {
 	options = append(options, page)
 	options = append(options, GoHaven.SortRandom)
 
-	havenIDs, _ := GoHaven.Search("", options...)
+	havenIDs, _ := WallHaven.Search("", options...)
 	background, err := wallpaper.Get()
 
 	if isError(err) {
