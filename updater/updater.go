@@ -21,7 +21,7 @@ func (git *Updater) LoadStatus() {
 }
 
 func (git *Updater) GetSHASum() string {
-	if git == nil {
+	if git == nil || len(git.Statues) <= 0 {
 		return ""
 	}
 
@@ -33,7 +33,7 @@ func (git *Updater) GetSHASum() string {
 }
 
 func (git *Updater) IsStable() bool {
-	if git == nil {
+	if git == nil || len(git.Statues) <= 0 {
 		return false
 	}
 
