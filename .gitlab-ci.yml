@@ -49,7 +49,7 @@ build-nightly:
     - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags '-H windowsgui'  -o $CI_PROJECT_DIR/RandomWP_x64_nightly.exe
   artifacts:
     paths:
-      - RandomWP_x86_debug.exe
-      - RandomWP_x64_debug.exe
+      - RandomWP_x86_nightly.exe
+      - RandomWP_x64_nightly.exe
   only:
     - develop
