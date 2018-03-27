@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Toyz/GoHaven"
 	"github.com/Toyz/RandomWP/desktop"
 	"github.com/Toyz/RandomWP/updater"
-	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/gen2brain/dlgs"
 	"github.com/skratchdot/open-golang/open"
 )
@@ -38,23 +38,23 @@ func setupTrayIcon() {
 		desktop.Menu{Type: desktop.MenuCheckBox, State: conf.AutoStart, Enabled: true, Name: "Auto start on load", Action: sys.StopForeverRunning},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Category", Menu: []desktop.Menu{
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == wallhaven.CatAnime, Enabled: true, Name: "Anime", Action: sys.ChageCategory},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == wallhaven.CatPeople, Enabled: true, Name: "People", Action: sys.ChageCategory},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == wallhaven.CatGeneral, Enabled: true, Name: "General", Action: sys.ChageCategory},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == GoHaven.CatAnime, Enabled: true, Name: "Anime", Action: sys.ChageCategory},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == GoHaven.CatPeople, Enabled: true, Name: "People", Action: sys.ChageCategory},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Category == GoHaven.CatGeneral, Enabled: true, Name: "General", Action: sys.ChageCategory},
 		}},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Purity", Menu: []desktop.Menu{
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Purity == wallhaven.PuritySFW, Enabled: true, Name: "SFW", Action: sys.ChageSafety},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Purity == wallhaven.PuritySketchy, Enabled: true, Name: "Sketchy", Action: sys.ChageSafety},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Purity == GoHaven.PuritySFW, Enabled: true, Name: "SFW", Action: sys.ChageSafety},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Purity == GoHaven.PuritySketchy, Enabled: true, Name: "Sketchy", Action: sys.ChageSafety},
 		}},
 		// SFW,sketchy
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change Display Raio", Menu: []desktop.Menu{
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio4x3, Enabled: true, Name: "4x3", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio5x4, Enabled: true, Name: "5x4", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio16x9, Enabled: true, Name: "16x9", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio16x10, Enabled: true, Name: "16x10", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio21x9, Enabled: true, Name: "21x9", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio32x9, Enabled: true, Name: "32x9", Action: sys.ChangeRatio},
-			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == wallhaven.Ratio48x9, Enabled: true, Name: "49x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio4x3, Enabled: true, Name: "4x3", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio5x4, Enabled: true, Name: "5x4", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio16x9, Enabled: true, Name: "16x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio16x10, Enabled: true, Name: "16x10", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio21x9, Enabled: true, Name: "21x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio32x9, Enabled: true, Name: "32x9", Action: sys.ChangeRatio},
+			desktop.Menu{Type: desktop.MenuCheckBox, State: conf.Ratio == GoHaven.Ratio48x9, Enabled: true, Name: "49x9", Action: sys.ChangeRatio},
 		}},
 		//4x3,5x4,16x9,16x10,21x9,32x9,48x9
 		desktop.Menu{Type: desktop.MenuSeparator},
@@ -135,7 +135,7 @@ func (m *SysTest) AutoDeleteImage(mn *desktop.Menu) {
 }
 
 func (m *SysTest) ChageCategory(mn *desktop.Menu) {
-	var c wallhaven.Categories
+	var c GoHaven.Categories
 	c.Set(strings.ToLower(mn.Name))
 	conf.Category = c
 
@@ -151,7 +151,7 @@ func (m *SysTest) ChageCategory(mn *desktop.Menu) {
 }
 
 func (m *SysTest) ChageSafety(mn *desktop.Menu) {
-	var c wallhaven.Purity
+	var c GoHaven.Purity
 	c.Set(strings.ToLower(mn.Name))
 	conf.Purity = c
 
@@ -167,7 +167,7 @@ func (m *SysTest) ChageSafety(mn *desktop.Menu) {
 }
 
 func (m *SysTest) ChangeRatio(mn *desktop.Menu) {
-	var c wallhaven.Ratios
+	var c GoHaven.Ratios
 	c.Set(strings.ToLower(mn.Name))
 	conf.Ratio = c
 
@@ -213,7 +213,9 @@ func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 		return
 	}
 	go func() {
-		p, _ := conf.LastImageID.Download(conf.SaveCurrentImageFolder)
+		details, _ := conf.LastImageID.Details()
+
+		p, _ := details.Download(conf.SaveCurrentImageFolder)
 		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
 }

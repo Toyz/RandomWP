@@ -9,10 +9,10 @@ import (
 	"path"
 	"time"
 
+	"github.com/Toyz/GoHaven"
 	"github.com/Toyz/RandomWP/desktop"
 
 	"github.com/Toyz/RandomWP/settings"
-	"github.com/Toyz/RandomWP/wallhaven"
 	"github.com/Toyz/RandomWP/wallpaper"
 	"github.com/gen2brain/beeep"
 	"github.com/gen2brain/dlgs"
@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	options = make([]wallhaven.Option, 0)
+	options = make([]GoHaven.Option, 0)
 
 	conf *settings.Config
 	// Run Once
@@ -30,6 +30,8 @@ var (
 
 	CurrentVersion      string
 	CurrentVersionShort string
+
+	WallHaven *GoHaven.WallHaven
 )
 
 func main() {
@@ -43,6 +45,8 @@ func main() {
 		log.Fatalf("failed to acquire exclusive app lock: %v", err)
 	}
 	defer s.TryUnlock()
+
+	WallHaven = GoHaven.New()
 
 	ver, _ := Asset("assets/version.txt")
 	runes := []rune(string(ver))
@@ -86,12 +90,12 @@ func startEndlessLoop() {
 
 func changeWallpaper() {
 	createOptions()
-	var page wallhaven.Page
+	var page GoHaven.Page
 	page = 1
 	options = append(options, page)
-	options = append(options, wallhaven.SortRandom)
+	options = append(options, GoHaven.SortRandom)
 
-	havenIDs, _ := wallhaven.Search("", options...)
+	havenIDs, _ := WallHaven.Search("", options...)
 	background, err := wallpaper.Get()
 
 	if isError(err) {
@@ -115,7 +119,12 @@ func changeWallpaper() {
 	conf.Save()
 
 	fmt.Printf("Current wallpaper: %s\n", background)
-	file, _ := conf.LastImageID.Download(conf.SaveFolder)
+	detail, _ := conf.LastImageID.Details()
+	fmt.Println(detail)
+
+	file, err := detail.Download(conf.SaveFolder)
+	isError(err)
+
 	fmt.Printf("New Wallpaper: %s\n", file)
 	wallpaper.SetFromFile(file)
 
@@ -130,7 +139,7 @@ func changeWallpaper() {
 }
 
 func createOptions() {
-	options = make([]wallhaven.Option, 0)
+	options = make([]GoHaven.Option, 0)
 	options = append(options, conf.Category)
 	options = append(options, conf.Purity)
 	options = append(options, conf.Ratio)
