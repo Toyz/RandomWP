@@ -213,7 +213,9 @@ func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 		return
 	}
 	go func() {
-		p, _ := conf.LastImageID.Download(conf.SaveCurrentImageFolder)
+		details, _ := conf.LastImageID.Details()
+
+		p, _ := details.Download(conf.SaveCurrentImageFolder)
 		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
 }

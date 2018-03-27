@@ -119,7 +119,12 @@ func changeWallpaper() {
 	conf.Save()
 
 	fmt.Printf("Current wallpaper: %s\n", background)
-	file, _ := conf.LastImageID.Download(conf.SaveFolder)
+	detail, _ := conf.LastImageID.Details()
+	fmt.Println(detail)
+
+	file, err := detail.Download(conf.SaveFolder)
+	isError(err)
+
 	fmt.Printf("New Wallpaper: %s\n", file)
 	wallpaper.SetFromFile(file)
 
