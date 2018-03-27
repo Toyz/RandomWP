@@ -226,7 +226,7 @@ func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
 		updater.GitUpdater.LoadStatus()
 
 		if !updater.GitUpdater.IsStable() {
-			m.Enabled = false
+			m.Enabled = true
 			t.S.Update()
 
 			dlgs.Info("No New Version", "There is currently no new version!")
@@ -242,7 +242,7 @@ func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
 		} else {
 			dlgs.Info("No New Version", "There is currently no new version!")
 		}
-		m.Enabled = false
+		m.Enabled = true
 		t.S.Update()
 	}(m, mn)
 	m.S.Update()
