@@ -24,7 +24,7 @@ before_script:
 stages:
   - build
 
-build-releaes:
+build:
   stage: build
   script:
     - godep restore -v

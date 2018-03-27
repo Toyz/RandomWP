@@ -2,6 +2,7 @@ package updater
 
 import (
 	"encoding/json"
+	"path"
 	"strings"
 
 	"github.com/parnurzeal/gorequest"
@@ -26,10 +27,8 @@ func (git *Updater) GetSHASum() string {
 	}
 
 	data := git.Statues[0]
-	sha := data.URL
-	urlParts := strings.Split(sha, "/")
 
-	return urlParts[len(urlParts)-1]
+	return strings.TrimSuffix(path.Base(data.URL), "\n")
 }
 
 func (git *Updater) IsStable() bool {

@@ -233,7 +233,8 @@ func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
 			return
 		}
 
-		if !strings.EqualFold(updater.GitUpdater.GetSHASum(), CurrentVersion) {
+		remoteVer := updater.GitUpdater.GetSHASum()
+		if !strings.EqualFold(remoteVer, strings.TrimSpace(CurrentVersion)) {
 			ok, _ := dlgs.Question("New Version available", "Do you wish to goto the current build page?", true)
 			if ok {
 				open.Run("https://gitlab.com/Toyz/RandomWP/-/jobs/artifacts/master/browse?job=build")
