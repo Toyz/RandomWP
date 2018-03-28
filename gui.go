@@ -59,6 +59,7 @@ func setupTrayIcon() {
 		//4x3,5x4,16x9,16x10,21x9,32x9,48x9
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Save Current Image", Action: sys.SaveCurrentImage},
+		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Show on Wallhaven", Action: sys.ShowOnWallhaven},
 		desktop.Menu{Type: desktop.MenuSeparator},
 		desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Setting", Menu: []desktop.Menu{
 			desktop.Menu{Type: desktop.MenuItem, Enabled: true, Name: "Change current image folder", Action: sys.ChangeCurrentImageSaveFolder},
@@ -218,6 +219,15 @@ func (m *SysTest) SaveCurrentImage(mn *desktop.Menu) {
 		p, _ := details.Download(conf.SaveCurrentImageFolder)
 		dlgs.Info("Saved Image", fmt.Sprintf("Saved image to:\n\n%s", p))
 	}()
+}
+
+func (m *SysTest) ShowOnWallhaven(mn *desktop.Menu) {
+	if conf.LastImageID <= 0 {
+		dlgs.Error("Open Image Failed", "Last image ID was less then zero\nThis happens when you first run!")
+		return
+	}
+
+	open.Run(fmt.Sprintf("https://whvn.cc/%d", conf.LastImageID))
 }
 
 func (m *SysTest) CheckForUpdate(mn *desktop.Menu) {
