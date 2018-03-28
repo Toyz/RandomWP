@@ -108,11 +108,11 @@ func changeWallpaper() {
 		return
 	}
 	currID := havenIDs[rand.Intn(len(havenIDs))]
-	if conf.LastImageID != currID {
-		conf.LastImageID = currID
+	if conf.LastImageID != currID.ImageID {
+		conf.LastImageID = currID.ImageID
 	} else {
-		for currID != conf.LastImageID {
-			conf.LastImageID = havenIDs[rand.Intn(len(havenIDs))]
+		for currID.ImageID != conf.LastImageID {
+			conf.LastImageID = havenIDs[rand.Intn(len(havenIDs))].ImageID
 		}
 	}
 
